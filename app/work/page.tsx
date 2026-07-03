@@ -118,16 +118,6 @@ export default function WorkPage() {
                   >
                     GitHub →
                   </a>
-                  {project.live && (
-                    <a
-                      href={project.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="brutal-btn-outline px-5 py-2 text-xs"
-                    >
-                      Live Demo →
-                    </a>
-                  )}
                 </div>
               </div>
             </article>

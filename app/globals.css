@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.protected-image img {
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+.protected-image-shield {
+  background: transparent;
+  pointer-events: auto;
+}
+
+body {
+  background-color: #f5f0e1;
+  color: #111111;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(#11111108 1px, transparent 1px),
+    linear-gradient(90deg, #11111108 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+@keyframes brutalReveal {
+  from {
+    opacity: 0;
+    transform: translate(12px, 12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+.scroll-reveal {
+  animation: brutalReveal 0.35s steps(4) both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 18%;
+}
+
+@supports not (animation-timeline: view()) {
+  .scroll-reveal {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal,
+  .hero-fade-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+.hero-fade-in {
+  animation: brutalFadeIn 0.6s steps(6) forwards;
+  opacity: 0;
+}
+
+@keyframes brutalFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(8px, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@layer components {
+  .brutal-card {
+    @apply bg-brutal-white border-4 border-brutal-black shadow-brutal transition-transform duration-150;
+  }
+
+  .brutal-card:hover {
+    @apply -translate-x-0.5 -translate-y-0.5 shadow-brutal-hover;
+  }
+
+  .brutal-panel {
+    @apply bg-brutal-white border-4 border-brutal-black shadow-brutal-lg;
+  }
+
+  .brutal-btn {
+    @apply inline-flex items-center justify-center gap-2 bg-brutal-yellow border-4 border-brutal-black shadow-brutal font-label-md text-label-md uppercase text-brutal-black transition-transform duration-150;
+  }
+
+  .brutal-btn:hover {
+    @apply -translate-x-0.5 -translate-y-0.5 shadow-brutal-hover;
+  }
+
+  .brutal-btn:active {
+    @apply translate-x-0.5 translate-y-0.5 shadow-none;
+  }
+
+  .brutal-btn-outline {
+    @apply inline-flex items-center justify-center gap-2 bg-brutal-white border-4 border-brutal-black shadow-brutal font-label-md text-label-md uppercase text-brutal-black transition-transform duration-150;
+  }
+
+  .brutal-btn-outline:hover {
+    @apply bg-brutal-cyan -translate-x-0.5 -translate-y-0.5 shadow-brutal-hover;
+  }
+
+  .brutal-tag {
+    @apply inline-block px-3 py-1 border-2 border-brutal-black bg-brutal-white font-mono text-[11px] uppercase tracking-wider;
+  }
+
+  .brutal-tag-accent {
+    @apply inline-block px-3 py-1 border-2 border-brutal-black bg-brutal-yellow font-mono text-[11px] uppercase tracking-wider;
+  }
+
+  .brutal-input {
+    @apply w-full border-4 border-brutal-black bg-brutal-white px-4 py-3 font-mono text-brutal-black placeholder:text-brutal-gray/50 focus:outline-none focus:shadow-brutal-sm;
+  }
+
+  .brutal-label {
+    @apply block font-label-md text-label-md uppercase text-brutal-black mb-2;
+  }
+
+  .brutal-section-title {
+    @apply font-headline-xl text-headline-xl uppercase tracking-tight;
+  }
+
+  .brutal-kicker {
+    @apply inline-block bg-brutal-black text-brutal-yellow font-label-md text-label-md uppercase px-3 py-1 mb-4;
+  }
+
+  .brutal-highlight {
+    @apply bg-brutal-yellow px-1 not-italic;
+  }
+
+  .brutal-divider {
+    @apply h-1 w-24 bg-brutal-black;
+  }
+
+  .brutal-link {
+    @apply font-mono uppercase text-sm border-b-4 border-brutal-black hover:bg-brutal-yellow transition-colors;
+  }
+
+  .brutal-nav-active {
+    @apply bg-brutal-yellow border-4 border-brutal-black shadow-brutal-sm px-3 py-1;
+  }
+}
+
+/* legacy aliases */
+.glass-card {
+  @apply brutal-card;
+}
+
+.glass-panel {
+  @apply brutal-panel;
+}
+
+.expertise-card {
+  @apply brutal-card;
+}
+
+.glow-effect {
+  @apply brutal-btn;
+}
+
+.form-input-bottom {
+  @apply brutal-input;
+}
+
+.hover-glow:hover {
+  @apply shadow-brutal-hover -translate-x-0.5 -translate-y-0.5;
+}

@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+dist
+.env*.local
+*.tsbuildinfo
+
+# duplicate local files kept outside the repo bundle
+/My.jpeg
+/My11.jpg
+/*.pdf

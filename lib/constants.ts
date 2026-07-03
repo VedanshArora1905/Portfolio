@@ -110,7 +110,7 @@ export const GITHUB_PROJECTS = [
       "Full-stack task manager with JWT auth, priority levels, status filters, and search — Next.js frontend on Vercel, Express API on Render.",
     variant: "taskTracker" as const,
     github: "https://github.com/VedanshArora1905/Task_Tracker",
-    live: "https://task-tracker-virid-six.vercel.app",
+    live: null,
   },
 ] as const;
 

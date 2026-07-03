@@ -6,16 +6,41 @@ export default function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
 
-    setTimeout(() => {
+    const formData = new FormData(e.currentTarget);
+    const payload = {
+      name: String(formData.get("name") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      subject: String(formData.get("subject") ?? ""),
+      message: String(formData.get("message") ?? ""),
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error ?? "Failed to send message.");
+      }
+
       setShowSuccess(true);
-      setIsSubmitting(false);
       formRef.current?.reset();
-    }, 1500);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to send message.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -75,12 +100,19 @@ export default function ContactForm() {
             required
           />
         </div>
+
+        {error && (
+          <p className="font-mono text-xs text-red-700 border-4 border-red-700 bg-red-50 p-3">
+            {error}
+          </p>
+        )}
+
         <button
           className="brutal-btn px-8 py-4 text-sm w-full md:w-auto"
           type="submit"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Processing..." : "Send Message →"}
+          {isSubmitting ? "Sending..." : "Send Message →"}
         </button>
       </form>
 

@@ -28,10 +28,23 @@ export default function ContactForm() {
         body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
+      const raw = await response.text();
+      const data: { success?: boolean; error?: string } | null = raw
+        ? (() => {
+            try {
+              return JSON.parse(raw);
+            } catch {
+              return null;
+            }
+          })()
+        : null;
 
       if (!response.ok) {
-        throw new Error(data.error ?? "Failed to send message.");
+        const hint =
+          response.status >= 500
+            ? "Server error. Try again in a minute."
+            : "Please check your details and try again.";
+        throw new Error(data?.error ?? hint);
       }
 
       setShowSuccess(true);

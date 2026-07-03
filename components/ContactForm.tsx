@@ -2,6 +2,8 @@
 
 import { FormEvent, useRef, useState } from "react";
 
+const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+
 export default function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -13,38 +15,47 @@ export default function ContactForm() {
     setIsSubmitting(true);
     setError(null);
 
+    if (!ACCESS_KEY) {
+      setError("Contact form is not configured. Add NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY in Vercel.");
+      setIsSubmitting(false);
+      return;
+    }
+
     const formData = new FormData(e.currentTarget);
     const payload = {
-      name: String(formData.get("name") ?? ""),
-      email: String(formData.get("email") ?? ""),
-      subject: String(formData.get("subject") ?? ""),
-      message: String(formData.get("message") ?? ""),
+      access_key: ACCESS_KEY,
+      name: String(formData.get("name") ?? "").trim(),
+      email: String(formData.get("email") ?? "").trim(),
+      subject: String(formData.get("subject") ?? "").trim(),
+      message: String(formData.get("message") ?? "").trim(),
+      botcheck: false,
     };
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify(payload),
       });
 
       const raw = await response.text();
-      const data: { success?: boolean; error?: string } | null = raw
-        ? (() => {
-            try {
-              return JSON.parse(raw);
-            } catch {
-              return null;
-            }
-          })()
-        : null;
+      let data: { success?: boolean; message?: string } | null = null;
+      if (raw) {
+        try {
+          data = JSON.parse(raw);
+        } catch {
+          throw new Error("Unexpected response from email service.");
+        }
+      }
 
-      if (!response.ok) {
-        const hint =
-          response.status >= 500
-            ? "Server error. Try again in a minute."
-            : "Please check your details and try again.";
-        throw new Error(data?.error ?? hint);
+      if (!response.ok || !data?.success) {
+        throw new Error(
+          data?.message ??
+            "Failed to send message. Check Web3Forms domain settings for vedansharora.vercel.app."
+        );
       }
 
       setShowSuccess(true);
@@ -59,6 +70,8 @@ export default function ContactForm() {
   return (
     <>
       <form ref={formRef} className="space-y-6" onSubmit={handleSubmit}>
+        <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} />
+
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <label className="brutal-label" htmlFor="name">

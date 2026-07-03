@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   GITHUB_PROJECTS,
   RESUME_URL,
@@ -43,20 +44,33 @@ export default function WorkPage() {
               key={job.role}
               className={`scroll-reveal brutal-card p-6 md:p-8 border-l-8 border-l-brutal-black ${job.accent}`}
             >
-              <div className="flex flex-col md:flex-row justify-between mb-4 gap-2">
-                <div>
-                  <h3 className="font-headline-lg uppercase">{job.role}</h3>
-                  <p className="font-mono text-xs uppercase text-brutal-gray mt-1">{job.org}</p>
+              <div className="flex items-start gap-4 md:gap-6">
+                <div className="relative w-28 h-28 md:w-36 md:h-36 shrink-0 border-4 border-brutal-black bg-brutal-white overflow-hidden">
+                  <Image
+                    src={job.logo}
+                    alt={`${job.org} logo`}
+                    fill
+                    className="object-contain p-2"
+                    sizes="144px"
+                  />
                 </div>
-                <span className="brutal-tag font-mono text-xs shrink-0 self-start">{job.date}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
+                    <div>
+                      <h3 className="font-headline-lg uppercase">{job.role}</h3>
+                      <p className="font-mono text-xs uppercase text-brutal-gray mt-1">{job.org}</p>
+                    </div>
+                    <span className="brutal-tag font-mono text-xs shrink-0 self-start">{job.date}</span>
+                  </div>
+                  <ul className="font-mono text-sm space-y-2 list-none">
+                    {job.highlights.map((item) => (
+                      <li key={item} className="before:content-['→_'] before:font-bold">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <ul className="font-mono text-sm space-y-2 list-none">
-                {job.highlights.map((item) => (
-                  <li key={item} className="before:content-['→_'] before:font-bold">
-                    {item}
-                  </li>
-                ))}
-              </ul>
             </div>
           ))}
         </div>

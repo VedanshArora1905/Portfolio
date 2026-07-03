@@ -53,6 +53,7 @@ export const WORK_EXPERIENCE = [
     date: "MAY — JUL 2025",
     role: "Summer Analyst — Engineering",
     org: "Goldman Sachs",
+    logo: "/logos/goldman-sachs.webp",
     accent: "bg-brutal-yellow",
     highlights: [
       "Built a real-time compliance panel with Angular, NgRx, and RxJS.",
@@ -64,6 +65,7 @@ export const WORK_EXPERIENCE = [
     date: "JAN 2026",
     role: "Winter Intern — ViBe Platform",
     org: "IIT Ropar",
+    logo: "/logos/iit-ropar.jpg",
     accent: "bg-brutal-cyan",
     highlights: [
       "Developed MERN modules and AI integrations for an adaptive learning platform.",
